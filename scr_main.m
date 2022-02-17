@@ -10,7 +10,7 @@ N_sa     = 9;    % # of signal-adapted kernels
 
 %-Optional user settings.
 %--------------------------------------------------------------------------
-N_unif   = 20;   % # of uniform kernels for estimating graph signal energies
+N_unif   = 50;   % # of uniform kernels for estimating graph signal energies
 L_smooth = 2500; % length of moving average window for smoothing the warping
 N_interp = 1000; % # of eigs to interp for plotting kernels
 UnifKernelType = 'MeyerLike'; % type of uniform kernels for estimating energy
