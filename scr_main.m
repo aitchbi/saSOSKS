@@ -12,7 +12,6 @@ N_sa     = 9;    % # of signal-adapted kernels
 %--------------------------------------------------------------------------
 N_unif   = 50;   % # of uniform kernels for estimating graph signal energies
 L_smooth = 2500; % length of moving average window for smoothing the warping
-N_interp = 1000; % # of eigs to interp for plotting kernels
 UnifKernelType = 'MeyerLike'; % type of uniform kernels for estimating energy
 
 %-Stuff.
@@ -88,6 +87,7 @@ clf(4);
 set(hf4,'position',[1 50 600 200]);
 axis;
 ha = gca;
+N_interp = 1000;
 d = 0:1/N_interp:G.lmax;
 spgg_view_design(g,[0,G.lmax],...
     'Graph',G,'eigsToInterp',d,'plotLineWidth',2,'guiHandle',ha);
