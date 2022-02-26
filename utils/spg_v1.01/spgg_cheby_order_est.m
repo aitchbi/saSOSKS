@@ -8,6 +8,11 @@ function [cOrds,e,G,Gc] = spgg_cheby_order_est(g,arange,opts)
 %   arange: spectral range, typically [0,lmax].
 %   opts.minOrds: an Nx1 vector of min cheby order to consider for each kernel.
 %   opts.maxOrds: an Nx1 vector of max cheby order to consider for each kernel.
+%   opts.ordStep: an integer, specifying steps to take between minOrd and
+%   maxOrd; this is useful for speeding up the search, but there is alo a
+%   risk that you skip a suitable order, and then you need to increase the
+%   order notably higher for another suitable order. This step is only used
+%   for estimating cOrds.kernel. (default=1)
 %   opts.tol:  
 %       - tol.kernel: tolerence when checking absolute difference between
 %       estimate an orginal kernel.
@@ -40,7 +45,7 @@ function [cOrds,e,G,Gc] = spgg_cheby_order_est(g,arange,opts)
 %   Gc: tight frame condition across spectrum using approximated kernels. 
 %
 % Hamid Behjat
-% Sep 2019 - 17 Feb 2022.
+% Sep 2019 - 26 Feb 2022.
 
 Ng = length(g);
 
@@ -66,6 +71,11 @@ else
         assert(length(opts.maxOrds)==1);
         maxOrds = opts.maxOrds*ones(1,Ng);
     end
+end
+if ~isfield(opts,'ordStep') || isempty(opts.ordStep)
+    ordStep = 1;
+else
+    ordStep = opts.ordStep;
 end
 if ~isfield(opts,'tol') || isempty(opts.tol)
     tol.kernel = 1e-4; % see NOTE 1. 
@@ -122,11 +132,11 @@ end
 
 if parallelize 
     parfor n = 1:Ng
-        [y(n),z(n)] = pvt3(g,n,x,minOrds,maxOrds,arange,tolk);
+        [y(n),z(n)] = pvt3(g,n,x,minOrds,maxOrds,ordStep,arange,tolk);
     end
 else
     for n = 1:Ng
-        [y(n),z(n)] = pvt3(g,n,x,minOrds,maxOrds,arange,tolk);
+        [y(n),z(n)] = pvt3(g,n,x,minOrds,maxOrds,ordStep,arange,tolk);
     end
 end
 
@@ -207,9 +217,9 @@ z = abs(G-Gc);
 end
 
 %==========================================================================
-function [o,e] = pvt3(g,n,x,minOrds,maxOrds,arange,tolk)
+function [o,e] = pvt3(g,n,x,minOrds,maxOrds,ordStep,arange,tolk)
 d1 = g{n}(x);
-for o=minOrds(n):maxOrds(n)
+for o=minOrds(n):ordStep:maxOrds(n)
     d2 = pvt1(g{n},o,arange,x);
     d3 = abs(d1(:)-d2(:));
     if all(d3<tolk)
