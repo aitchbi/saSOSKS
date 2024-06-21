@@ -1,10 +1,4 @@
 function [xl,xh,pl,ph] = spgg_aux1_splinetype(so,sz,pou)
-%
-%
-%
-%
-% Hamid Behjat
-% Sep 2019.
 
 [spl,~,~,x,ic,im] = hb_get_spline(so,sz,'approach','analytic');
 
