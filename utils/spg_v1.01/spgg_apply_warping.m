@@ -49,7 +49,7 @@ else
             check = E(indNonEqual(i)) - E(indNonEqual(i-1));
             
             if  check < minSparseFactor
-                interp_x = [interp_x, E(indNonEqual(i))];
+                interp_x = [interp_x, E(indNonEqual(i))]; %#ok<*AGROW> 
                 interp_y = [interp_y, lmax*warping(indNonEqual(i))];
             else
                 dummy = E(indNonEqual(i-1))+extrapolStep:extrapolStep:E(indNonEqual(i));
