@@ -1,10 +1,4 @@
 function [d3,d4] = spgg_aux2_splinetype(so,sz,iN,N,sc,lmax,pou,xl,xh,pl,ph)
-%
-%
-%
-%
-% Hamid Behjat
-% Sep 2019.
 
 [spl,~,~,x] = hb_get_spline(so,sz,'approach','analytic');
 splsqrt = sqrt(spl);
@@ -104,7 +98,8 @@ end
 
 [d3,d4] = hb_pvt(d1,d2,lmax);
 
-if length(unique(d3(:)))~=length(d3) % 27 June 2019 --- d3 must be unique, othewise interp1 will run into error when calling g{.}
+if length(unique(d3(:)))~=length(d3) 
+    % d3 must be unique, othewise interp1 will run into error when calling g{.}
     %error('something is fishy..')
     d5 = [true;logical(diff(d3))];
     d3 = d3(d5);
@@ -112,6 +107,7 @@ if length(unique(d3(:)))~=length(d3) % 27 June 2019 --- d3 must be unique, othew
 end
 end
 
+%==========================================================================
 function [d3,d4] = hb_pvt(d1,d2,lmax)
 d1 = d1(:);
 d2 = d2(:);
